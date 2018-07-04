@@ -1,0 +1,9 @@
+server:
+  port: 8081
+
+sso:
+  server: http://localhost:8080/
+  logout:
+    path: /logout
+  redis:
+    address: 192.168.20.160:6379

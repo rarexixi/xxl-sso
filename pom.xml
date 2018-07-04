@@ -16,6 +16,7 @@
         <module>xxl-sso-core</module>
         <module>xxl-sso-server</module>
         <module>xxl-sso-samples</module>
+        <module>custom</module>
     </modules>
 
     <properties>

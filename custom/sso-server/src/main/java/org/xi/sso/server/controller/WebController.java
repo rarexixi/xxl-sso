@@ -1,9 +1,13 @@
 package org.xi.sso.server.controller;
 
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.xi.sso.core.conf.SsoConf;
 import org.xi.sso.core.model.SsoUser;
 import org.xi.sso.core.util.SsoLoginHelper;
 import org.xi.sso.server.entity.UserEntity;
+import org.xi.sso.server.model.LoginModel;
 import org.xi.sso.server.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,36 +18,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.UUID;
 
 /**
  * sso server (for web)
  */
 @Controller
-public class IndexController {
+@RequestMapping("/web")
+public class WebController {
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
-    public String index(Model model, HttpServletRequest request) {
-
-        SsoUser ssoUser = SsoLoginHelper.loginCheck(request);
-        if (ssoUser == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("ssoUser", ssoUser);
-        return "index";
-    }
-
     /**
-     * Login page
+     * web 登录
      *
      * @param model
      * @param request
      * @return
      */
-    @RequestMapping(SsoConf.SSO_LOGIN)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, HttpServletRequest request) {
 
         SsoUser ssoUser = SsoLoginHelper.loginCheck(request);
@@ -51,8 +46,9 @@ public class IndexController {
         // 用户为空，跳转到登录页
         if (ssoUser == null) {
             model.addAttribute("errorMsg", request.getParameter("errorMsg"));
+            model.addAttribute("model", new LoginModel());
             model.addAttribute(SsoConf.REDIRECT_URL, request.getParameter(SsoConf.REDIRECT_URL));
-            return "login";
+            return "web/login";
         }
 
         // 重定向为空，返回主页
@@ -68,31 +64,31 @@ public class IndexController {
     }
 
     /**
-     * Login
+     * web 登录
      *
      * @param request
-     * @param redirectAttributes
-     * @param username
-     * @param password
+     * @param response
+     * @param model
+     * @param loginModel
+     * @param errors
      * @return
      */
-    @RequestMapping("/doLogin")
-    public String doLogin(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes,
-                          String username, String password) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(HttpServletRequest request, HttpServletResponse response, Model model,
+                        @Valid @ModelAttribute("model") LoginModel loginModel, Errors errors) {
 
-        String errorMsg = null;
-        if (StringUtils.isBlank(username)) errorMsg = "请输入用户名";
-        if (StringUtils.isBlank(password)) errorMsg = "请输入密码";
-
-        UserEntity user = userService.getByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) errorMsg = "用户名或密码错误";
+        if (errors.hasErrors()) {
+            return "web/login";
+        }
 
         String redirectUrl = request.getParameter(SsoConf.REDIRECT_URL);
 
-        if (errorMsg != null) {
-            redirectAttributes.addAttribute("errorMsg", errorMsg);
-            redirectAttributes.addAttribute(SsoConf.REDIRECT_URL, redirectUrl);
-            return "redirect:/login";
+        UserEntity user = userService.getByUsername(loginModel.getUsername());
+        if (user == null || !user.getPassword().equals(loginModel.getPassword())) {
+            model.addAttribute("errorMsg", "用户名或密码错误");
+            model.addAttribute("model", loginModel);
+            model.addAttribute(SsoConf.REDIRECT_URL, redirectUrl);
+            return "web/login";
         }
 
         SsoUser ssoUser = new SsoUser();
@@ -110,18 +106,18 @@ public class IndexController {
     }
 
     /**
-     * Logout
+     * web 注销
      *
      * @param request
      * @param redirectAttributes
      * @return
      */
-    @RequestMapping(SsoConf.SSO_LOGOUT)
+    @RequestMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 
         SsoLoginHelper.logout(request, response);
         redirectAttributes.addAttribute(SsoConf.REDIRECT_URL, request.getParameter(SsoConf.REDIRECT_URL));
-        return "redirect:/login";
+        return "redirect:/web/login";
     }
 
 }

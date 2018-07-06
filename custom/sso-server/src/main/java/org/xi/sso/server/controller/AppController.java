@@ -4,6 +4,7 @@ import org.xi.sso.core.model.ReturnVo;
 import org.xi.sso.core.model.SsoUser;
 import org.xi.sso.core.util.SsoLoginHelper;
 import org.xi.sso.server.entity.UserEntity;
+import org.xi.sso.server.model.LoginModel;
 import org.xi.sso.server.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +21,22 @@ public class AppController {
     private UserService userService;
 
     /**
-     * Login
+     * app 登录接口
      *
-     * @param username
-     * @param password
+     * @param model
      * @return
      */
     @RequestMapping("/login")
-    public ReturnVo<String> login(String username, String password) {
+    public ReturnVo<String> login(LoginModel model) {
 
-        if (StringUtils.isBlank(username)) {
+        if (StringUtils.isBlank(model.getUsername())) {
             return new ReturnVo<>(ReturnVo.FAIL_CODE, "请输入用户名");
         }
-        if (StringUtils.isBlank(password)) {
+        if (StringUtils.isBlank(model.getPassword())) {
             return new ReturnVo<>(ReturnVo.FAIL_CODE, "请输入密码");
         }
-        UserEntity user = userService.getByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) {
+        UserEntity user = userService.getByUsername(model.getUsername());
+        if (user == null || !user.getPassword().equals(model.getPassword())) {
             return new ReturnVo<>(ReturnVo.FAIL_CODE, "用户名或密码错误");
         }
 
@@ -52,7 +52,7 @@ public class AppController {
 
 
     /**
-     * Logout
+     * app 注销接口
      *
      * @param sessionId
      * @return
@@ -64,7 +64,7 @@ public class AppController {
     }
 
     /**
-     * login check
+     * app 登录验证
      *
      * @param sessionId
      * @return

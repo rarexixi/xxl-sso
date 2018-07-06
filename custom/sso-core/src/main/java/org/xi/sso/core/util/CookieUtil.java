@@ -18,6 +18,18 @@ public class CookieUtil {
      * @param response
      * @param key
      * @param value
+     * @param maxAge
+     */
+    public static void set(HttpServletResponse response, String key, String value, int maxAge) {
+        set(response, key, value, null, COOKIE_PATH, maxAge, true);
+    }
+
+    /**
+     * 保存
+     *
+     * @param response
+     * @param key
+     * @param value
      * @param remember
      */
     public static void set(HttpServletResponse response, String key, String value, boolean remember) {

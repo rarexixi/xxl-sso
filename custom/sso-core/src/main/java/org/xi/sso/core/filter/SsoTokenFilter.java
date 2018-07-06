@@ -20,10 +20,12 @@ public class SsoTokenFilter extends HttpServlet implements Filter {
     private static Logger logger = LoggerFactory.getLogger(SsoTokenFilter.class);
 
     private String ssoServer;
+    private String loginPath;
     private String logoutPath;
 
-    public SsoTokenFilter(String ssoServer, String logoutPath) {
+    public SsoTokenFilter(String ssoServer, String loginPath, String logoutPath) {
         this.ssoServer = ssoServer;
+        this.loginPath = loginPath;
         this.logoutPath = logoutPath;
     }
 

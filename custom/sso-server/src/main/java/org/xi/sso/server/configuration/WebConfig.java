@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new PermissionInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**", SsoConf.SSO_LOGIN);
+        registry.addInterceptor(new PermissionInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**");
     }
 }

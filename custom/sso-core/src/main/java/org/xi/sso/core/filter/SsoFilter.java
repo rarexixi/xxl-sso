@@ -19,10 +19,12 @@ public class SsoFilter extends HttpServlet implements Filter {
     private static Logger logger = LoggerFactory.getLogger(SsoFilter.class);
 
     private String ssoServer;
+    private String loginPath;
     private String logoutPath;
 
-    public SsoFilter(String ssoServer, String logoutPath) {
+    public SsoFilter(String ssoServer, String loginPath, String logoutPath) {
         this.ssoServer = ssoServer;
+        this.loginPath = loginPath;
         this.logoutPath = logoutPath;
     }
 
@@ -41,7 +43,7 @@ public class SsoFilter extends HttpServlet implements Filter {
 
         if (StringUtils.isNotBlank(logoutPath) && logoutPath.equals(servletPath)) {
             SsoLoginHelper.removeSessionIdInCookie(req, res);
-            String logoutPageUrl = ssoServer.concat(SsoConf.SSO_LOGOUT);
+            String logoutPageUrl = ssoServer.concat(logoutPath);
             res.sendRedirect(logoutPageUrl);
             return;
         }
@@ -68,7 +70,7 @@ public class SsoFilter extends HttpServlet implements Filter {
                 res.getWriter().println(JacksonUtil.toJson(SsoConf.SSO_LOGIN_FAIL_RESULT));
                 return;
             } else {
-                String loginPageUrl = ssoServer.concat(SsoConf.SSO_LOGIN) + "?" + SsoConf.REDIRECT_URL + "=" + link;
+                String loginPageUrl = ssoServer.concat(loginPath) + "?" + SsoConf.REDIRECT_URL + "=" + link;
                 res.sendRedirect(loginPageUrl);
                 return;
             }

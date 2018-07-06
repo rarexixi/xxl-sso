@@ -21,3 +21,9 @@ redis:
   address:
     192.168.20.160:6379
 
+captcha:
+  cookie-id: captcha_id
+  code-length: 6
+  cookie-max-time: 60
+  redis-max-time: 60
+

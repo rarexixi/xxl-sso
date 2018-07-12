@@ -2,7 +2,8 @@ server:
   port: 8081
 
 sso:
-  server: http://localhost:8080/
+  server: http://localhost:8080
   login-path: /web/login
-  logout-path: /web/logout
   redis-address: 192.168.20.160:6379
+  exclude-paths: /hello
+  url-patterns: /*

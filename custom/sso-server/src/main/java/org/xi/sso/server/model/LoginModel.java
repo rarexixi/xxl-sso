@@ -13,6 +13,8 @@ public class LoginModel {
     @Pattern(regexp = "^.{6,}$", message = "密码不能小于6位")
     private String password;
 
+    private String redirectUrl;
+
     public String getUsername() {
         return username;
     }
@@ -27,5 +29,13 @@ public class LoginModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
     }
 }

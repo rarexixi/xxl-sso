@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.xi.sso.server.utils.SsoUserUtils;
 
 import java.util.UUID;
 
@@ -40,9 +41,7 @@ public class AppController {
             return new ReturnVo<>(ReturnVo.FAIL_CODE, "用户名或密码错误");
         }
 
-        SsoUser ssoUser = new SsoUser();
-        ssoUser.setUserId(user.getId());
-        ssoUser.setUsername(user.getUsername());
+        SsoUser ssoUser = SsoUserUtils.getSsoUser(user);
 
         String sessionId = UUID.randomUUID().toString();
         SsoLoginHelper.login(sessionId, ssoUser);
@@ -78,4 +77,8 @@ public class AppController {
         return new ReturnVo<>(ssoUser);
     }
 
+    @RequestMapping("/throw")
+    public String throwException() throws Exception {
+        throw new Exception("hello exception");
+    }
 }

@@ -25,7 +25,7 @@ public class SsoConfig implements InitializingBean {
 
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setName("SsoFilter");
-        registration.setOrder(1);
+        registration.setOrder(2);
         registration.addUrlPatterns(ssoProperties.getUrlPatterns());
         registration.setFilter(new SsoFilter(ssoProperties.getServer(), ssoProperties.getLoginPath(), ssoProperties.getExcludePaths()));
         return registration;

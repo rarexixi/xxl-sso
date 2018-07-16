@@ -19,7 +19,7 @@ mybatis:
 
 redis:
   address:
-    192.168.20.160:6379
+    127.0.0.1:6379
 
 captcha:
   cookie-id: captcha_id

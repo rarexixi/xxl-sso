@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.xi.sso.core.util.UrlUtil;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SsoFilter extends HttpServlet implements Filter {
+public class SsoFilter implements Filter {
 
     private static Logger logger = LoggerFactory.getLogger(SsoFilter.class);
 

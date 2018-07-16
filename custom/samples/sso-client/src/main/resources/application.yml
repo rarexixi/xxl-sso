@@ -4,6 +4,23 @@ server:
 sso:
   server: http://localhost:8080
   login-path: /web/login
-  redis-address: 192.168.20.160:6379
+  redis-address: 127.0.0.1:6379
   exclude-paths: /hello
   url-patterns: /*
+
+cors:
+  cors-registrations:
+    - pathPattern: /**
+      allowedOrigins: http://localhost:63342
+      allowedMethods: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
+      allowedHeaders: Origin, X-Requested-With, Content-Type, Accept
+      exposedHeaders:
+      allowCredentials: true
+      maxAge: 3600
+  filter:
+    pathPattern: /*
+    allowedOrigins: http://localhost:63342
+    allowedMethods: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
+    allowedHeaders: Origin, X-Requested-With, Content-Type, Accept
+    allowCredentials: true
+    maxAge: 3600

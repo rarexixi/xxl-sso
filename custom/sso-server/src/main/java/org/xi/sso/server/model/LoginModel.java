@@ -13,6 +13,11 @@ public class LoginModel {
     @Pattern(regexp = "^.{6,}$", message = "密码不能小于6位")
     private String password;
 
+
+    @NotNull(message = "验证码不能为空")
+    @Pattern(regexp = "^[0-9A-Za-z]{4}$", message = "验证码为4位")
+    private String captcha;
+
     private String redirectUrl;
 
     public String getUsername() {
@@ -29,6 +34,14 @@ public class LoginModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCaptcha() {
+        return captcha;
+    }
+
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
     }
 
     public String getRedirectUrl() {

@@ -23,7 +23,7 @@ redis:
 
 captcha:
   cookie-id: captcha_id
-  code-length: 6
+  code-length: 4
   cookie-max-time: 60
   redis-max-time: 60
 

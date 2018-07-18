@@ -26,25 +26,37 @@
         <form method="POST" th:action="@{/web/login}" th:object="${model}">
             <div class="form-group">
                 <label>用户名</label>
-                <input type="text" class="form-control" th:field="*{username}"
+                <input type="text" class="form-control" th:field="*{username}" id="username"
                        th:class="${#fields.hasErrors('username')} ? 'form-control is-invalid' : 'form-control'"
                        placeholder="用户名">
+                <div class="invalid-feedback" th:text="${#fields.errors('username')}"
+                     th:errors="*{username}"></div>
             </div>
             <div class="form-group">
                 <label>密码</label>
-                <input type="password" class="form-control" th:field="*{password}"
+                <input type="password" class="form-control" th:field="*{password}" id="password"
                        th:class="${#fields.hasErrors('password')} ? 'form-control is-invalid' : 'form-control'"
                        placeholder="密码">
+                <div class="invalid-feedback" th:text="${#fields.errors('password')}"
+                     th:errors="*{password}"></div>
             </div>
-            <!--<div class="form-group form-check">-->
-                <!--<input type="checkbox" class="form-check-input" id="remember" name="remember">-->
-                <!--<label class="form-check-label" for="remember">记住我</label>-->
-            <!--</div>-->
-            <input type="hidden" th:field="*{redirectUrl}"/>
-            <div>
-                <div class="text-danger" th:if="${#fields.hasErrors('*')}">
-                    <small th:each="err : ${#fields.errors('*')}" th:text="${err}"></small>
+            <div class="form-group">
+                <label for="captcha">验证码</label>
+                <div class="row">
+                    <div class="col-8">
+                        <input type="text" class="form-control" th:field="*{captcha}" id="captcha"
+                               th:class="${#fields.hasErrors('captcha')} ? 'form-control is-invalid' : 'form-control'"
+                               placeholder="验证码">
+                        <div class="invalid-feedback" th:text="${#fields.errors('captcha')}"
+                             th:errors="*{captcha}"></div>
+                    </div>
+                    <div class="col-4">
+                        <img id="captcha-img" class="w-100" th:src="@{/captcha/get}" alt="验证码">
+                    </div>
                 </div>
+            </div>
+            <input type="hidden" th:field="*{redirectUrl}" id="redirectUrl"/>
+            <div>
                 <small class="text-danger" th:text="${errorMsg}"></small>
             </div>
             <button type="submit" class="btn btn-primary">登录</button>
@@ -58,5 +70,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
         integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
+
+<script>
+    $('#captcha-img').click(function () {
+        $(this).height($('#captcha').outerHeight());
+        $(this).attr('src', '/captcha/get?' + Date.now());
+        $('#captcha').val('');
+    });
+    $('#captcha-img').click();
+</script>
 </body>
 </html>
